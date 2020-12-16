@@ -8,20 +8,26 @@
 
   let word = "";
   let nearestWord = "";
+  let loadingWord = false;
 
   let sent = "";
   let nearestSent = "";
+  let loadingSent = false;
 
   const handleNearestWord = async () => {
+    loadingWord = true;
     const { nearest: n, dist } = await getNearestWord(word);
     console.log("NEAREST", n);
     console.log("DIST", dist);
+    loadingWord = false;
     nearestWord = n;
   };
   const handleNearestSent = async () => {
+    loadingSent = true;
     const { nearest: n, dist } = await getNearestSent(sent);
     console.log("NEAREST", n);
     console.log("DIST", dist);
+    loadingSent = false;
     nearestSent = n;
   };
 </script>
@@ -114,7 +120,7 @@
   </section>
 
   <section>
-    <h2>So what about words?</h2>
+    <h2>What about words?</h2>
     <p>
       Words are distinct on their own, so how do we compare them? How do we know
       that the word
@@ -154,10 +160,14 @@
     </p>
   </section>
   <section>
-    <Input bind:value={word} />
-    <Button onclick={handleNearestWord}>Get Nearest Word</Button>
+    <Input bind:value={word} placeholder="apple" />
+    <Button onclick={handleNearestWord} disabled={loadingWord}>
+      Get Nearest Word
+    </Button>
     <div>
-      {#if !nearestWord}
+      {#if loadingWord}
+        <h3>Loading...</h3>
+      {:else if !nearestWord}
         <h3 class="nearest">Nearest</h3>
       {:else}
         <h3 class="nearest">{nearestWord}</h3>
@@ -180,10 +190,16 @@
     </p>
   </section>
   <section>
-    <Input bind:value={sent} />
-    <Button onclick={handleNearestSent}>Get Nearest Sent</Button>
+    <Input
+      bind:value={sent}
+      placeholder="The night is dark and full of terror." />
+    <Button onclick={handleNearestSent} disabled={loadingSent}>
+      Get Nearest Sent
+    </Button>
     <div>
-      {#if !nearestSent}
+      {#if loadingSent}
+        <h3>Loading ...</h3>
+      {:else if !nearestSent}
         <h3 class="nearest">Nearest</h3>
       {:else}
         <h3 class="nearest">{nearestSent}</h3>

@@ -5,10 +5,13 @@
 
   let sentence;
   let isBelief = {};
+  let loading = false;
   const onclick = async () => {
+    loading = true;
     const res = await isSentBelief(sentence, "wordvecs70000");
     console.log("RES", res);
     isBelief = res;
+    loading = false;
   };
 </script>
 
@@ -24,7 +27,7 @@
 <Input
   bind:value={sentence}
   placeholder="My favorite food is strawberry ice cream." />
-<Button {onclick}>Is this a belief?</Button>
+<Button {onclick} disabled={loading}>Is this a belief?</Button>
 
 {#await isBelief}
   <p>loading...</p>

@@ -8,12 +8,15 @@
   let url;
   let sentences = [];
   let currentSent = 0;
+  let loadingSent = false;
   const onclick = async () => {
+    loadingSent = true;
     currentSent = 0;
 
     const res = await getSentsFromUrl(url);
     console.log("RES", res);
     sentences = res.sentences;
+    loadingSent = false;
   };
 
   const reset = () => {
@@ -43,7 +46,7 @@
 <Input
   bind:value={url}
   placeholder="https://www.ign.com/articles/cyberpunk-2077-review" />
-<Button {onclick}>Train from url</Button>
+<Button {onclick} disabled={loadingSent}>Train from url</Button>
 
 {#if sentences.length}
   <Card {onyes} {onno}>{sentences[currentSent]}</Card>

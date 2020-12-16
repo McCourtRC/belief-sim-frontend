@@ -1,5 +1,8 @@
 <script>
+  import Spinner from "./Spinner.svelte";
+
   export let onclick;
+  export let disabled;
 </script>
 
 <style>
@@ -25,6 +28,17 @@
     cursor: pointer;
     background-color: rgba(255, 62, 0, 0.2);
   }
+
+  button:disabled {
+    cursor: default;
+    background-color: lightgray;
+  }
 </style>
 
-<button on:click={onclick}><slot /></button>
+<button on:click={onclick} {disabled}>
+  {#if disabled}
+    <Spinner />
+  {:else}
+    <slot />
+  {/if}
+</button>
