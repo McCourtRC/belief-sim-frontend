@@ -1,10 +1,7 @@
 <script>
   import Input from "./Input.svelte";
   import Button from "./Button.svelte";
-  import {
-    nearestWord as getNearestWord,
-    nearestSent as getNearestSent,
-  } from "./api";
+  import { getNearestWord, getNearestSent } from "./api";
 
   let word = "";
   let nearestWord = "";
@@ -15,20 +12,22 @@
   let loadingSent = false;
 
   const handleNearestWord = async () => {
+    if (!word.trim()) return;
     loadingWord = true;
-    const { nearest: n, dist } = await getNearestWord(word);
-    console.log("NEAREST", n);
+    const { nearest, dist } = await getNearestWord(word);
+    console.log("NEAREST", nearest);
     console.log("DIST", dist);
     loadingWord = false;
-    nearestWord = n;
+    nearestWord = nearest;
   };
   const handleNearestSent = async () => {
+    if (!sent.trim()) return;
     loadingSent = true;
-    const { nearest: n, dist } = await getNearestSent(sent);
-    console.log("NEAREST", n);
+    const { nearest, dist } = await getNearestSent(sent);
+    console.log("NEAREST", nearest);
     console.log("DIST", dist);
     loadingSent = false;
-    nearestSent = n;
+    nearestSent = nearest;
   };
 </script>
 
@@ -230,10 +229,8 @@
   <section>
     <h2>Author Notes:</h2>
     <p>
-      Corey here. I built this in a couple of days and didn't have time to set
-      up a database. All the data is being stored on a .txt file. That, paired
-      with the fact that heroku seems to refresh after a few minutes means that
-      the data is not persistent. Lesson learned.
+      Corey here. I built this in a few days so bear with me if things start
+      falling apart.
     </p>
     <ul>
       <b>Tech:</b>

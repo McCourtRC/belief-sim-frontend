@@ -5,18 +5,21 @@
   import Card from "./Card.svelte";
   import { getSentsFromUrl, saveSent } from "./api";
 
-  let url;
+  let url = "";
   let sentences = [];
   let currentSent = 0;
-  let loadingSent = false;
+  let loadingParser = false;
+  let loadingSentences = false;
+
   const onclick = async () => {
-    loadingSent = true;
+    if (!url.trim()) return;
+    loadingParser = true;
     currentSent = 0;
 
     const res = await getSentsFromUrl(url);
     console.log("RES", res);
     sentences = res.sentences;
-    loadingSent = false;
+    loadingParser = false;
   };
 
   const reset = () => {
@@ -27,16 +30,20 @@
     if (currentSent >= sentences.length - 1) reset();
     else {
       // DO YES
+      loadingSentences = true;
       const res = await saveSent(sentences[currentSent], 1);
       currentSent++;
+      loadingSentences = false;
     }
   };
   const onno = async () => {
     if (currentSent >= sentences.length - 1) reset();
     else {
       // DO NO
+      loadingSentences = true;
       const res = await saveSent(sentences[currentSent], 0);
       currentSent++;
+      loadingSentences = false;
     }
   };
 </script>
@@ -46,8 +53,10 @@
 <Input
   bind:value={url}
   placeholder="https://www.ign.com/articles/cyberpunk-2077-review" />
-<Button {onclick} disabled={loadingSent}>Train from url</Button>
+<Button {onclick} disabled={loadingParser}>Train from url</Button>
 
 {#if sentences.length}
-  <Card {onyes} {onno}>{sentences[currentSent]}</Card>
+  <Card {onyes} {onno} loading={loadingSentences}>
+    {sentences[currentSent]}
+  </Card>
 {/if}

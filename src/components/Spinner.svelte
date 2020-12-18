@@ -1,1 +1,5 @@
-<i class="fas fa-spinner fa-pulse" />
+<script>
+  export let size = "fa-lg";
+</script>
+
+<i class={`fas fa-spinner fa-pulse ${size}`} />

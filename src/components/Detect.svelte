@@ -3,15 +3,21 @@
   import Button from "./Button.svelte";
   import { isSentBelief } from "./api";
 
-  let sentence;
-  let isBelief = {};
+  let sentence = "";
   let loading = false;
-  const onclick = async () => {
+
+  const get = async () => {
     loading = true;
     const res = await isSentBelief(sentence, "wordvecs70000");
     console.log("RES", res);
-    isBelief = res;
     loading = false;
+    return res;
+  };
+
+  let isBelief = {};
+  const onclick = () => {
+    if (!sentence.trim()) return;
+    isBelief = get();
   };
 </script>
 
@@ -30,9 +36,9 @@
 <Button {onclick} disabled={loading}>Is this a belief?</Button>
 
 {#await isBelief}
-  <p>loading...</p>
+  <h2>loading...</h2>
 {:then { beliefAvg, topSents }}
-  {#if beliefAvg}
+  {#if beliefAvg !== undefined}
     <h2>{Math.round(beliefAvg * 100)}% belief</h2>
 
     <h3>{topSents.slice(0, 10).length} Closest Sentences</h3>

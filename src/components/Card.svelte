@@ -1,6 +1,9 @@
 <script>
+  import Spinner from "./Spinner.svelte";
+
   export let onyes;
   export let onno;
+  export let loading = false;
 </script>
 
 <style>
@@ -41,8 +44,13 @@
 
 <div class="card">
   <h2>Is this a belief?</h2>
+
   <p>
-    <slot />
+    {#if loading}
+      <Spinner size="fa-4x" />
+    {:else}
+      <slot>!No more sentences to evaluate!</slot>
+    {/if}
   </p>
   <div class="btns">
     <button class="btn" on:click={onno}>No</button>

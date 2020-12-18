@@ -10,7 +10,7 @@ export const fetchJSON = async (filename) => {
   return vectors;
 };
 
-export const nearestWord = async (word) => {
+export const getNearestWord = async (word) => {
   const endpoint = `${baseUrl}/nearest/word`;
   const res = await fetch(endpoint, {
     method: 'POST',
@@ -22,7 +22,7 @@ export const nearestWord = async (word) => {
   return nearest;
 };
 
-export const nearestSent = async (sent) => {
+export const getNearestSent = async (sent) => {
   const endpoint = `${baseUrl}/nearest/dracula`;
   console.log('SENT', sent);
   const res = await fetch(endpoint, {
@@ -61,11 +61,11 @@ export const getSentsFromUrl = async (url) => {
   return data;
 };
 
-export const saveSent = async (sent, belief) => {
+export const saveSent = async (sentence, score) => {
   const endpoint = `${baseUrl}/data/belief`;
   const res = await fetch(endpoint, {
     method: 'POST',
-    body: JSON.stringify({ sent, belief }),
+    body: JSON.stringify({ sentence, score }),
     headers: { 'Content-type': 'application/json; charset=UTF-8' },
   }).catch((err) => console.log('ERR', err));
 
